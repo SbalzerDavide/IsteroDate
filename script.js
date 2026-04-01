@@ -271,8 +271,10 @@ function hideMessages() {
     resultsContainer.style.display = 'none';
 }
 
-// Imposta la data di oggi come data massima selezionabile
+// Imposta la data di oggi come data massima selezionabile e come valore di default
 document.addEventListener('DOMContentLoaded', function() {
     const today = new Date().toISOString().split('T')[0];
-    document.getElementById('lastPeriod').setAttribute('max', today);
+    const lastPeriodInput = document.getElementById('lastPeriod');
+    lastPeriodInput.setAttribute('max', today);
+    lastPeriodInput.value = today;
 });
