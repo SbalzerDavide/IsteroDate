@@ -1,0 +1,121 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Ridimensiona Icona</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            max-width: 800px;
+            margin: 50px auto;
+            padding: 20px;
+            text-align: center;
+        }
+        canvas {
+            border: 1px solid #ddd;
+            margin: 20px 0;
+        }
+        button {
+            background: #4A90E2;
+            color: white;
+            border: none;
+            padding: 12px 24px;
+            font-size: 16px;
+            border-radius: 8px;
+            cursor: pointer;
+            margin: 10px;
+        }
+        button:hover {
+            background: #3d7ac5;
+        }
+        .preview {
+            display: inline-block;
+            margin: 20px;
+        }
+        input[type="file"] {
+            margin: 20px 0;
+            padding: 10px;
+        }
+        .hidden {
+            display: none;
+        }
+    </style>
+</head>
+<body>
+    <h1>Ridimensiona UteroDate.png</h1>
+    <p>Carica l'immagine uteroDate.png e scarica le versioni ridimensionate</p>
+    
+    <input type="file" id="fileInput" accept="image/png,image/jpeg,image/jpg">
+    
+    <div id="previews" class="hidden">
+        <div class="preview">
+            <h3>192x192</h3>
+            <canvas id="canvas192" width="192" height="192"></canvas>
+            <br>
+            <button onclick="downloadResized(192)">Scarica uteroDate.png (192x192)</button>
+        </div>
+        
+        <div class="preview">
+            <h3>512x512</h3>
+            <canvas id="canvas512" width="512" height="512"></canvas>
+            <br>
+            <button onclick="downloadResized(512)">Scarica uteroDate-512.png</button>
+        </div>
+    </div>
+
+    <script>
+        const fileInput = document.getElementById('fileInput');
+        const previews = document.getElementById('previews');
+        let originalImage = null;
+
+        fileInput.addEventListener('change', function(e) {
+            const file = e.target.files[0];
+            if (!file) return;
+
+            const reader = new FileReader();
+            reader.onload = function(event) {
+                originalImage = new Image();
+                originalImage.onload = function() {
+                    resizeAndDisplay();
+                    previews.classList.remove('hidden');
+                };
+                originalImage.src = event.target.result;
+            };
+            reader.readAsDataURL(file);
+        });
+
+        function resizeAndDisplay() {
+            if (!originalImage) return;
+
+            // Resize to 192x192
+            const canvas192 = document.getElementById('canvas192');
+            const ctx192 = canvas192.getContext('2d');
+            ctx192.imageSmoothingEnabled = true;
+            ctx192.imageSmoothingQuality = 'high';
+            ctx192.drawImage(originalImage, 0, 0, 192, 192);
+
+            // Resize to 512x512
+            const canvas512 = document.getElementById('canvas512');
+            const ctx512 = canvas512.getContext('2d');
+            ctx512.imageSmoothingEnabled = true;
+            ctx512.imageSmoothingQuality = 'high';
+            ctx512.drawImage(originalImage, 0, 0, 512, 512);
+        }
+
+        function downloadResized(size) {
+            const canvas = document.getElementById(`canvas${size}`);
+            const link = document.createElement('a');
+            
+            if (size === 192) {
+                link.download = 'uteroDate.png';
+            } else {
+                link.download = `uteroDate-${size}.png`;
+            }
+            
+            link.href = canvas.toDataURL('image/png');
+            link.click();
+        }
+    </script>
+</body>
+</html>

@@ -1,0 +1,154 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Generatore Icone PWA</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            max-width: 800px;
+            margin: 50px auto;
+            padding: 20px;
+            text-align: center;
+        }
+        canvas {
+            border: 1px solid #ddd;
+            margin: 20px 0;
+        }
+        button {
+            background: #4A90E2;
+            color: white;
+            border: none;
+            padding: 12px 24px;
+            font-size: 16px;
+            border-radius: 8px;
+            cursor: pointer;
+            margin: 10px;
+        }
+        button:hover {
+            background: #3d7ac5;
+        }
+        .preview {
+            display: inline-block;
+            margin: 20px;
+        }
+    </style>
+</head>
+<body>
+    <h1>Generatore Icone PWA</h1>
+    <p>Clicca sui pulsanti per scaricare le icone nelle dimensioni richieste</p>
+    
+    <div class="preview">
+        <h3>Anteprima 192x192</h3>
+        <canvas id="canvas192" width="192" height="192"></canvas>
+        <br>
+        <button onclick="downloadIcon(192)">Scarica icon-192.png</button>
+    </div>
+    
+    <div class="preview">
+        <h3>Anteprima 512x512</h3>
+        <canvas id="canvas512" width="512" height="512"></canvas>
+        <br>
+        <button onclick="downloadIcon(512)">Scarica icon-512.png</button>
+    </div>
+
+    <script>
+        function drawIcon(ctx, size) {
+            const scale = size / 512;
+            
+            // Background
+            ctx.fillStyle = '#4A90E2';
+            ctx.beginPath();
+            ctx.roundRect(0, 0, size, size, 80 * scale);
+            ctx.fill();
+            
+            // Calendar
+            const offset = 106 * scale;
+            const calWidth = 300 * scale;
+            const calHeight = 240 * scale;
+            
+            // Calendar body
+            ctx.fillStyle = 'white';
+            ctx.beginPath();
+            ctx.roundRect(offset, offset + 60 * scale, calWidth, calHeight, 20 * scale);
+            ctx.fill();
+            
+            // Calendar header
+            ctx.beginPath();
+            ctx.roundRect(offset, offset + 40 * scale, calWidth, 80 * scale, 20 * scale);
+            ctx.fill();
+            
+            ctx.fillStyle = '#3d7ac5';
+            ctx.fillRect(offset, offset + 80 * scale, calWidth, 40 * scale);
+            
+            // Calendar rings
+            ctx.fillStyle = 'white';
+            ctx.beginPath();
+            ctx.roundRect(offset + 60 * scale, offset + 20 * scale, 20 * scale, 60 * scale, 10 * scale);
+            ctx.fill();
+            ctx.beginPath();
+            ctx.roundRect(offset + 220 * scale, offset + 20 * scale, 20 * scale, 60 * scale, 10 * scale);
+            ctx.fill();
+            
+            // Uterus symbol
+            const uterusX = offset + 150 * scale;
+            const uterusY = offset + 175 * scale;
+            ctx.fillStyle = '#4A90E2';
+            ctx.strokeStyle = '#4A90E2';
+            ctx.lineWidth = 2 * scale;
+            
+            // Left fallopian tube
+            ctx.beginPath();
+            ctx.moveTo(uterusX - 45 * scale, uterusY - 15 * scale);
+            ctx.quadraticCurveTo(uterusX - 55 * scale, uterusY - 25 * scale, uterusX - 60 * scale, uterusY - 15 * scale);
+            ctx.quadraticCurveTo(uterusX - 55 * scale, uterusY - 5 * scale, uterusX - 45 * scale, uterusY - 5 * scale);
+            ctx.fill();
+            ctx.beginPath();
+            ctx.arc(uterusX - 60 * scale, uterusY - 15 * scale, 8 * scale, 0, Math.PI * 2);
+            ctx.fill();
+            
+            // Right fallopian tube
+            ctx.beginPath();
+            ctx.moveTo(uterusX + 45 * scale, uterusY - 15 * scale);
+            ctx.quadraticCurveTo(uterusX + 55 * scale, uterusY - 25 * scale, uterusX + 60 * scale, uterusY - 15 * scale);
+            ctx.quadraticCurveTo(uterusX + 55 * scale, uterusY - 5 * scale, uterusX + 45 * scale, uterusY - 5 * scale);
+            ctx.fill();
+            ctx.beginPath();
+            ctx.arc(uterusX + 60 * scale, uterusY - 15 * scale, 8 * scale, 0, Math.PI * 2);
+            ctx.fill();
+            
+            // Uterus body
+            ctx.beginPath();
+            ctx.moveTo(uterusX - 40 * scale, uterusY - 10 * scale);
+            ctx.lineTo(uterusX + 40 * scale, uterusY - 10 * scale);
+            ctx.lineTo(uterusX + 25 * scale, uterusY + 40 * scale);
+            ctx.quadraticCurveTo(uterusX, uterusY + 50 * scale, uterusX - 25 * scale, uterusY + 40 * scale);
+            ctx.closePath();
+            ctx.fill();
+            
+            // Cervix
+            ctx.beginPath();
+            ctx.roundRect(uterusX - 8 * scale, uterusY + 40 * scale, 16 * scale, 20 * scale, 4 * scale);
+            ctx.fill();
+        }
+        
+        // Draw icons on load
+        const canvas192 = document.getElementById('canvas192');
+        const ctx192 = canvas192.getContext('2d');
+        drawIcon(ctx192, 192);
+        
+        const canvas512 = document.getElementById('canvas512');
+        const ctx512 = canvas512.getContext('2d');
+        drawIcon(ctx512, 512);
+        
+        function downloadIcon(size) {
+            const canvas = document.getElementById(`canvas${size}`);
+            const link = document.createElement('a');
+            link.download = `icon-${size}.png`;
+            link.href = canvas.toDataURL('image/png');
+            link.click();
+        }
+    </script>
+</body>
+</html>
