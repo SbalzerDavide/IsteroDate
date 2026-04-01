@@ -68,7 +68,7 @@ function calculateDates() {
         minDateForProcedure.setDate(minDateForProcedure.getDate() + 1);
         
         const maxDateForProcedure = new Date(endOfPeriod);
-        maxDateForProcedure.setDate(maxDateForProcedure.getDate() + 13);
+        maxDateForProcedure.setDate(maxDateForProcedure.getDate() + 14);
         
         // Trova tutti i lunedì disponibili nell'intervallo
         const availableMondays = findMondaysInRange(minDateForProcedure, maxDateForProcedure);
