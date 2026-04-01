@@ -206,7 +206,7 @@ function displayResults(cycles) {
         } else {
             // Mostra le date disponibili
             cycle.availableMondays.forEach((date, index) => {
-                const daysFromStart = daysBetween(cycle.startDate, date);
+                const daysFromStart = daysBetween(cycle.startDate, date) + 1;
                 const daysAfterPeriod = daysBetween(cycle.endOfPeriod, date);
                 const isFirst = index === 0;
 

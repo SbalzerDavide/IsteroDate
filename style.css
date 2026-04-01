@@ -24,11 +24,13 @@ body {
     background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
     min-height: 100vh;
     padding: 20px;
+    overflow-x: hidden;
 }
 
 .container {
     max-width: 700px;
     margin: 0 auto;
+    overflow-x: hidden;
 }
 
 header {
@@ -69,11 +71,15 @@ header h1 {
 
 .form-group input {
     width: 100%;
+    max-width: 100%;
     padding: 12px;
     border: 2px solid var(--border-color);
     border-radius: 6px;
     font-size: 1rem;
     transition: border-color 0.3s;
+    -webkit-appearance: none;
+    -moz-appearance: none;
+    appearance: none;
 }
 
 .form-group input:focus {
@@ -288,7 +294,20 @@ header h1 {
     }
 
     .card {
-        padding: 20px;
+        padding: 15px;
+    }
+
+    .form-group input {
+        padding: 10px;
+        font-size: 16px; /* Previene zoom automatico su iOS */
+    }
+
+    .form-group label {
+        font-size: 0.95rem;
+    }
+
+    .form-group small {
+        font-size: 0.8rem;
     }
 
     .results-container {
@@ -305,6 +324,7 @@ header h1 {
 
     .cycle-info {
         font-size: 0.85rem;
+        word-break: break-word;
     }
 
     .date-card {
