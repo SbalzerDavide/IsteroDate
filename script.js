@@ -60,8 +60,9 @@ function calculateDates() {
         cycleStartDate.setDate(cycleStartDate.getDate() + (cycleDuration * i));
         
         // Calcola la fine del flusso mestruale per questo ciclo
+        // Il giorno di inizio conta come giorno 1, quindi aggiungiamo (durata - 1)
         const endOfPeriod = new Date(cycleStartDate);
-        endOfPeriod.setDate(endOfPeriod.getDate() + periodDuration);
+        endOfPeriod.setDate(endOfPeriod.getDate() + (periodDuration - 1));
         
         // Calcola la finestra temporale per l'isteroscopia
         const minDateForProcedure = new Date(endOfPeriod);
