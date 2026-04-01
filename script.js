@@ -40,10 +40,12 @@ function calculateDates() {
 
     // Converti la data dell'ultima mestruazione
     const lastPeriodDate = new Date(lastPeriodInput);
+    lastPeriodDate.setHours(0, 0, 0, 0);
+    
     const today = new Date();
     today.setHours(0, 0, 0, 0);
 
-    // Verifica che la data non sia nel futuro
+    // Verifica che la data non sia nel futuro (oggi è permesso)
     if (lastPeriodDate > today) {
         showError('La data dell\'ultima mestruazione non può essere nel futuro.');
         return;
