@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Calcolatore Date Isteroscopia</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>📅 Calcolatore Date Isteroscopia</h1>
+            <p class="subtitle">Calcola le date ottimali per prenotare la tua visita</p>
+        </header>
+
+        <div class="card">
+            <form id="calcForm">
+                <div class="form-group">
+                    <label for="lastPeriod">Data ultima mestruazione:</label>
+                    <input type="date" id="lastPeriod" name="lastPeriod" required>
+                </div>
+
+                <div class="form-group">
+                    <label for="cycleDuration">Durata media ciclo (giorni):</label>
+                    <input type="number" id="cycleDuration" name="cycleDuration" value="28" min="21" max="35" required>
+                    <small>Numero di giorni tra l'inizio di una mestruazione e la successiva</small>
+                </div>
+
+                <div class="form-group">
+                    <label for="periodDuration">Durata media flusso mestruale (giorni):</label>
+                    <input type="number" id="periodDuration" name="periodDuration" value="5" min="2" max="10" required>
+                    <small>Numero di giorni di durata del flusso mestruale</small>
+                </div>
+
+                <button type="submit" class="btn-primary">Calcola Date Disponibili</button>
+            </form>
+
+            <div class="info-box">
+                <p><strong>ℹ️ Informazioni:</strong></p>
+                <p>L'isteroscopia può essere effettuata nell'intervallo tra la fine del flusso mestruale e fino a 13 giorni dopo. Le sedute sono disponibili solo di lunedì. L'applicazione mostrerà i prossimi 5 cicli mestruali con tutte le date disponibili.</p>
+            </div>
+        </div>
+
+        <div id="results" class="results-container" style="display: none;">
+            <h2>Prossimi 5 Cicli Mestruali e Date Disponibili</h2>
+            <div id="datesList"></div>
+        </div>
+
+        <div id="error" class="error-message" style="display: none;"></div>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+</html>
