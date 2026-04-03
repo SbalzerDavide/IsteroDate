@@ -3,6 +3,7 @@ const form = document.getElementById('calcForm');
 const resultsContainer = document.getElementById('results');
 const datesListContainer = document.getElementById('datesList');
 const errorContainer = document.getElementById('error');
+const submitButton = form.querySelector('.btn-primary');
 
 // Event listener per il form
 form.addEventListener('submit', function(e) {
@@ -16,6 +17,10 @@ form.addEventListener('submit', function(e) {
 function calculateDates() {
     // Nascondi messaggi precedenti
     hideMessages();
+    
+    // Aggiungi loading state
+    submitButton.disabled = true;
+    submitButton.classList.add('loading');
 
     // Ottieni i valori dal form
     const lastPeriodInput = document.getElementById('lastPeriod').value;
@@ -24,17 +29,17 @@ function calculateDates() {
 
     // Validazione input
     if (!lastPeriodInput) {
-        showError('Per favore inserisci la data dell\'ultima mestruazione.');
+        showError('Per favore inserisci la data dell\'ultima mestruazione');
         return;
     }
 
     if (cycleDuration < 21 || cycleDuration > 35) {
-        showError('La durata del ciclo deve essere tra 21 e 35 giorni.');
+        showError('La durata del ciclo deve essere tra 21 e 35 giorni');
         return;
     }
 
     if (periodDuration < 2 || periodDuration > 10) {
-        showError('La durata del flusso deve essere tra 2 e 10 giorni.');
+        showError('La durata del flusso deve essere tra 2 e 10 giorni');
         return;
     }
 
@@ -47,7 +52,7 @@ function calculateDates() {
 
     // Verifica che la data non sia nel futuro (oggi è permesso)
     if (lastPeriodDate > today) {
-        showError('La data dell\'ultima mestruazione non può essere nel futuro.');
+        showError('La data dell\'ultima mestruazione non può essere nel futuro');
         return;
     }
 
@@ -170,28 +175,13 @@ function displayResults(cycles) {
         const cycleTitle = document.createElement('h3');
         cycleTitle.textContent = `Ciclo ${cycle.cycleNumber}`;
         
-        // Data di inizio mestruazione evidenziata
+        // Data di inizio mestruazione
         const menstruationStart = document.createElement('div');
         menstruationStart.className = 'menstruation-start';
-        
-        const menstruationBadge = document.createElement('span');
-        menstruationBadge.className = 'badge menstruation';
-        menstruationBadge.textContent = '🩸 Inizio Mestruazione';
-        
-        const menstruationDate = document.createElement('span');
-        menstruationDate.className = 'menstruation-date';
-        menstruationDate.textContent = formatDateIT(cycle.startDate);
-        
-        menstruationStart.appendChild(menstruationBadge);
-        menstruationStart.appendChild(menstruationDate);
-        
-        const cycleInfo = document.createElement('p');
-        cycleInfo.className = 'cycle-info';
-        cycleInfo.textContent = `Fine flusso: ${formatDateIT(cycle.endOfPeriod)} | Intervallo valido per isteroscopia: ${formatDateIT(cycle.minDate)} - ${formatDateIT(cycle.maxDate)}`;
+        menstruationStart.textContent = formatDateIT(cycle.startDate);
         
         cycleHeader.appendChild(cycleTitle);
         cycleHeader.appendChild(menstruationStart);
-        cycleHeader.appendChild(cycleInfo);
         cycleContainer.appendChild(cycleHeader);
 
         // Dates disponibili
@@ -202,21 +192,16 @@ function displayResults(cycles) {
             // Nessun lunedì disponibile
             const noDateMessage = document.createElement('div');
             noDateMessage.className = 'no-dates-message';
-            noDateMessage.textContent = '⚠️ Nessun lunedì disponibile in questo intervallo';
+            noDateMessage.textContent = 'Nessun lunedì disponibile in questo intervallo';
             datesContainer.appendChild(noDateMessage);
         } else {
             // Mostra le date disponibili
             cycle.availableMondays.forEach((date, index) => {
                 const daysFromStart = daysBetween(cycle.startDate, date) + 1;
-                const daysAfterPeriod = daysBetween(cycle.endOfPeriod, date);
                 const isFirst = index === 0;
 
                 const card = document.createElement('div');
                 card.className = `date-card ${isFirst ? 'recommended' : ''}`;
-
-                const badge = document.createElement('span');
-                badge.className = `badge ${isFirst ? 'recommended' : 'alternative'}`;
-                badge.textContent = isFirst ? '✅ Data Consigliata' : '📌 Alternativa';
 
                 const dateMain = document.createElement('div');
                 dateMain.className = 'date-main';
@@ -224,19 +209,8 @@ function displayResults(cycles) {
 
                 const dateInfo = document.createElement('div');
                 dateInfo.className = 'date-info';
-                
-                const daysFromStartDiv = document.createElement('div');
-                daysFromStartDiv.className = 'date-detail';
-                daysFromStartDiv.innerHTML = `<strong>Giorno ${daysFromStart}</strong> dall'inizio del ciclo`;
-                
-                const daysAfterPeriodDiv = document.createElement('div');
-                daysAfterPeriodDiv.className = 'date-detail';
-                daysAfterPeriodDiv.innerHTML = `<strong>${daysAfterPeriod} giorni</strong> dopo la fine del flusso`;
-                
-                dateInfo.appendChild(daysFromStartDiv);
-                dateInfo.appendChild(daysAfterPeriodDiv);
+                dateInfo.textContent = `Giorno ${daysFromStart} dall'inizio del ciclo`;
 
-                card.appendChild(badge);
                 card.appendChild(dateMain);
                 card.appendChild(dateInfo);
                 datesContainer.appendChild(card);
@@ -249,9 +223,15 @@ function displayResults(cycles) {
 
     // Mostra il container dei risultati
     resultsContainer.style.display = 'block';
+    
+    // Rimuovi loading state
+    submitButton.disabled = false;
+    submitButton.classList.remove('loading');
 
-    // Scroll smooth verso i risultati
-    resultsContainer.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+    // Scroll smooth verso i risultati con delay per permettere l'animazione
+    setTimeout(() => {
+        resultsContainer.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    }, 100);
 }
 
 /**
@@ -259,9 +239,16 @@ function displayResults(cycles) {
  * @param {string} message - Messaggio da mostrare
  */
 function showError(message) {
-    errorContainer.textContent = '⚠️ ' + message;
+    errorContainer.textContent = message;
     errorContainer.style.display = 'block';
     resultsContainer.style.display = 'none';
+    
+    // Rimuovi loading state
+    submitButton.disabled = false;
+    submitButton.classList.remove('loading');
+    
+    // Scroll all'errore
+    errorContainer.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
 }
 
 /**
